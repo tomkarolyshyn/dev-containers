@@ -1,6 +1,6 @@
 # PROJECT_DIR=$(shell cd ../test_mnt && pwd)
 
-.PHONY: help all llvm-python fpga-sim
+.PHONY: help all llvm-python fpga-sim vitis fpga-sim-test vitis-run
 
 help:
 	@echo "Makefile for building the FPGA project using Docker"
@@ -16,5 +16,11 @@ fpga-sim:
 
 fpga-sim-test:
 	docker run -it --rm --name fpga-sim fpga-sim:latest bash
+
+vitis:
+	docker-compose build vitis
+
+vitis-run :
+	docker-compose run --rm vitis bash
 all:
 	docker-compose build
