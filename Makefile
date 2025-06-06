@@ -21,6 +21,6 @@ vitis:
 	docker-compose build vitis
 
 vitis-run :
-	docker-compose run --rm vitis bash
+	docker-compose run --rm vitis
 all:
 	docker-compose build

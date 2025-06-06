@@ -69,7 +69,7 @@ RUN apt-get install -y x11-apps xauth
 ## Vivado/Vitis Setup
 
 RUN mkdir -p /viv_install
-# COPY vitis_fix.sh /viv_install/vitis_fix.sh  # needed for the Vitis GUI to work
+COPY vitis_fix.sh /viv_install/vitis_fix.sh
 COPY install_config.txt /viv_install/install_config.txt
 COPY installLibs.sh /viv_install/installLibs.sh
 
@@ -80,7 +80,7 @@ RUN --mount=type=bind,source=$VIVADO_DIR,target=/$VIVADO_DIR \
 #      ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
 
 RUN /viv_install/installLibs.sh
-#  && /viv_install/vitis_fix.sh
+RUN /viv_install/vitis_fix.sh
 # RUN cd / && rm -r viv_install
 ##############################3
 ## Cleanup
@@ -105,6 +105,7 @@ RUN git config --global --add safe.directory /project
 # Ensure that we're using bash for interactive sessions
 # COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 
-CMD ["/bin/bash", "-l"]
+# CMD ["/bin/bash", "-l"]
+CMD ["bash", "-c", "source /tools/Xilinx/2025.1/Vitis/settings64.sh && exec bash"]
 
 # ENTRYPOINT ["/entrypoint.sh"]
