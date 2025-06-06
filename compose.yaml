@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
       args:
         BASE_IMAGE: ubuntu:24.04
-        VITIS_VERSION: 2025.1
+        VIVADO_DIR: viv_2025.1
     environment:
       - DISPLAY=${DISPLAY}
       - SSH_AUTH_SOCK=/ssh-agent
