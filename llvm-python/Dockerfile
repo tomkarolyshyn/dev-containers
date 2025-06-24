@@ -1,5 +1,5 @@
-ARG BASE_IMAGE=python:3.12-slim
-FROM BASE_IMAGE
+ARG BASE_IMAGE=ubuntu:24.04
+FROM $BASE_IMAGE
 
 
 ARG LLVM_VERSION=20
@@ -17,22 +17,22 @@ RUN apt-get update ; apt-get install --no-install-recommends \
     -y \
     autoconf \
     automake \
-    ca-certificates \
     cmake \
     libfreetype6-dev \
     g++ \
     gcc \
     time \
     libxml2-dev \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
     make \
     musl-dev \
     ninja-build \
     libncurses5-dev libncursesw5-dev \
-    python3 \
-    python3-dev \
     nano \
     git \
-    wget \
     libz-dev \
     libzstd-dev
 
@@ -55,12 +55,24 @@ RUN update-alternatives --install /usr/bin/intercept-build intercept-build /usr/
 RUN update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-${LLVM_VERSION} 100
 
 
-# Install intercept-build via pip
-# RUN pip install uv
-# RUN pip install pre-commit
+# install some python packages,
+#     --break-system-packages is OK in containers.
+
+ENV PIP_NO_CACHE_DIR=1
+RUN pip install --break-system-packages uv
+RUN pip install --break-system-packages pre-commit
 
 WORKDIR /project
 # Necessary for a couple of old tests
 # cmd ["make" "examples"]
+
+
+##############################
+# Cleanup
+RUN \
+  apt-get autoclean && \
+  apt-get autoremove && \
+  rm -rf /var/lib/apt/lists/*
+
 
 CMD ["bash"]

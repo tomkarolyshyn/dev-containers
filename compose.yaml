@@ -7,18 +7,16 @@ services:
       dockerfile: Dockerfile
       args:
         LLVM_VERSION: 20
-    image: llvm-python:latest
+    image: tomkarolyshyn/llvm-python:latest
 
   fpga-sim:
     build:
       context: ./fpga-sim
       dockerfile: Dockerfile
       args:
-        BASE_IMAGE: python:3.12-slim
-        # BASE_IMAGE: ubuntu:24.04
-        # LLVM_VERSION: 20
+        BASE_IMAGE: ubuntu:24.04
         VERILATOR_REV: v5.036
-    image: fpga-sim:latest
+    image: tomkarolyshyn/fpga-sim:latest
     container_name: fpga_sim
 
   vitis:

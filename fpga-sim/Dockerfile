@@ -1,12 +1,12 @@
 # Base image: Ubuntu 24.04
-ARG BASE_IMAGE=python:3.12-slim
+ARG BASE_IMAGE=ubuntu:24.04
 FROM $BASE_IMAGE
 
 ARG VERILATOR_REV=v5.036
 
 # Copy setup scripts and other files
 COPY --chmod=0755 verilator_setup.sh /tmp/verilator_setup.sh
-COPY --chmod=0755 requirements.txt /tmp/requirements.txt
+COPY requirements.txt /tmp/requirements.txt
 
 # Run the verilator install (includes apt install)
 RUN /tmp/verilator_setup.sh  ${VERILATOR_REV}
@@ -22,20 +22,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gdb \
     curl \
     wget \
-    git \
     vim \
     nano \
     sudo \
     procps \
-    locales
+    locales \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
 
 ENV PIP_NO_CACHE_DIR=1
 
 
-ENV PATH="/root/.local/bin:$PATH"
-ENV PATH="/venv/bin:$PATH"
-
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+RUN pip install --break-system-packages -r /tmp/requirements.txt
 
 
 # Set up a working directory
