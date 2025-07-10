@@ -1,11 +1,4 @@
 #!/bin/bash
 
-export BOOLSI_RTL_DIR=/boolsi_rtl
+source /tools/Xilinx/Vitis/2025.1/settings64.sh
 
-cd /project
-
-echo $PATH
-
-bside hw build
-
-exit 0
