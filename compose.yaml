@@ -10,15 +10,15 @@ services:
         LLVM_VERSION: 20
     image: tomkarolyshyn/llvm-python:latest
 
-  fpga-sim:
+  rtl-sim:
     build:
-      context: ./fpga-sim
+      context: ./rtl-sim
       dockerfile: Dockerfile
       args:
         BASE_IMAGE: ubuntu:24.04
         VERILATOR_REV: v5.036
-    image: tomkarolyshyn/fpga-sim:latest
-    container_name: fpga_sim
+    image: tomkarolyshyn/rtl-sim:latest
+    container_name: rtl_sim
 
   vitis:
     build:

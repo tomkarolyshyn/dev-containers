@@ -7,9 +7,9 @@ LLVM 20 and python3.12
 *  Posted on [DockerHub](https://hub.docker.com/repository/docker/tomkarolyshyn/llvm-python/general)
 
 
-## llvm-python
+## rtl-sim
 Verilog simulation libraries using CocoTB and Verilator
-*  Posted on [DockerHub](https://hub.docker.com/repository/docker/tomkarolyshyn/fpga-sim/general)
+*  Posted on [DockerHub](https://hub.docker.com/repository/docker/tomkarolyshyn/rtl-sim/general)
 
 ## vitis
 Vitis 2025.1 install.
