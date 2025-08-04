@@ -11,6 +11,9 @@ help:
 llvm-python:
 	docker-compose build llvm-python
 
+llvm-python-test:
+	docker-compose run --rm llvm-python bash
+
 fpga-sim:
 	docker-compose build fpga-sim
 
