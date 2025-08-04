@@ -71,7 +71,6 @@ RUN apt-get install -y x11-apps xauth
 RUN mkdir -p /viv_install
 COPY vitis_fix.sh /viv_install/vitis_fix.sh
 COPY install_config.txt /viv_install/install_config.txt
-# COPY installLibs.sh /viv_install/installLibs.sh
 
 RUN --mount=type=bind,source=$VIVADO_DIR,target=/$VIVADO_DIR \
   cd /$VIVADO_DIR  && ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
@@ -79,9 +78,8 @@ RUN --mount=type=bind,source=$VIVADO_DIR,target=/$VIVADO_DIR \
 # RUN cd /viv_install  && \
 #      ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
 
-# RUN /viv_install/installLibs.sh
 RUN /viv_install/vitis_fix.sh
-# RUN cd / && rm -r viv_install
+
 ##############################3
 ## Cleanup
 

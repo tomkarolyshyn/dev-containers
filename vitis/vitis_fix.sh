@@ -1,11 +1,7 @@
 #!/bin/bash
 
-# default system
-# XLX_DIR=/home/tomk/tools/Xilinx
-
-#local option
-VITIS_DIR=/tools/Xilinx/Vitis/2024.2
-# VITIS_DIR=/tools/Xilinx/2025.1/Vitis
+# VITIS_DIR=/tools/Xilinx/Vitis/2024.2
+VITIS_DIR=/tools/Xilinx/2025.1/Vitis
 
 echo "VITIS_DIR is set to: $VITIS_DIR"
 
