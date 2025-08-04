@@ -1,5 +1,5 @@
 # dev-containers
-hold docker files needed for general development.  all based on Ubuntu 24 LTS
+Docker files needed for general development. 
 
 
 ## llvm-python
