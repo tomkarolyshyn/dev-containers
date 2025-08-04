@@ -6,18 +6,19 @@ services:
       context: ./llvm-python
       dockerfile: Dockerfile
       args:
+        BASE_IMAGE: ubuntu:24.04
         LLVM_VERSION: 20
     image: tomkarolyshyn/llvm-python:latest
 
-  fpga-sim:
+  rtl-sim:
     build:
-      context: ./fpga-sim
+      context: ./rtl-sim
       dockerfile: Dockerfile
       args:
         BASE_IMAGE: ubuntu:24.04
         VERILATOR_REV: v5.036
-    image: tomkarolyshyn/fpga-sim:latest
-    container_name: fpga_sim
+    image: tomkarolyshyn/rtl-sim:latest
+    container_name: rtl_sim
 
   vitis:
     build:
@@ -25,7 +26,7 @@ services:
       dockerfile: Dockerfile
       args:
         BASE_IMAGE: ubuntu:24.04
-        VIVADO_DIR: viv_2025.1
+        VIVADO_DIR: Xilinx_2025.1
     environment:
       - DISPLAY=${DISPLAY}
       - SSH_AUTH_SOCK=/ssh-agent
@@ -33,7 +34,7 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix #x11
       - $SSH_AUTH_SOCK:/ssh-agent
     image: vitis:2025.1
-    network_mode: host  # Optional: Only for Linux
+    network_mode: host # Optional: Only for Linux
     stdin_open: true
     tty: true
     container_name: vitis

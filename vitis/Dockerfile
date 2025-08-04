@@ -21,36 +21,36 @@ RUN \
 
 RUN \
   apt-get install -y --no-install-recommends \
-    build-essential \
-    libtinfo-dev \
-    python3-pip \
-    python3-venv \
-    python3-dev \
-    git \
-    make \
-    ca-certificates \
-    locales \
-    lsb-release \
-    net-tools \
-    patch \
-    pigz \
-    unzip \
-    wget \
-    libc6-dev-i386 net-tools \
-    graphviz \
-    make \
-    unzip \
-    zip \
-    g++ \
-    xvfb \
-    git \
-    openssh-client \
-    libc6-dev-i386 \
-    libnss3-dev \
-    libgdk-pixbuf2.0-dev \
-    libgtk-3-dev \
-    libxss-dev  \
-    fdisk
+  build-essential \
+  libtinfo-dev \
+  python3-pip \
+  python3-venv \
+  python3-dev \
+  git \
+  make \
+  ca-certificates \
+  locales \
+  lsb-release \
+  net-tools \
+  patch \
+  pigz \
+  unzip \
+  wget \
+  libc6-dev-i386 net-tools \
+  graphviz \
+  make \
+  unzip \
+  zip \
+  g++ \
+  xvfb \
+  git \
+  openssh-client \
+  libc6-dev-i386 \
+  libnss3-dev \
+  libgdk-pixbuf2.0-dev \
+  libgtk-3-dev \
+  libxss-dev  \
+  fdisk
 
 
 ##############################3
@@ -71,17 +71,15 @@ RUN apt-get install -y x11-apps xauth
 RUN mkdir -p /viv_install
 COPY vitis_fix.sh /viv_install/vitis_fix.sh
 COPY install_config.txt /viv_install/install_config.txt
-COPY installLibs.sh /viv_install/installLibs.sh
 
 RUN --mount=type=bind,source=$VIVADO_DIR,target=/$VIVADO_DIR \
-    cd /$VIVADO_DIR  && ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
+  cd /$VIVADO_DIR  && ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
 
 # RUN cd /viv_install  && \
 #      ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
 
-RUN /viv_install/installLibs.sh
 RUN /viv_install/vitis_fix.sh
-# RUN cd / && rm -r viv_install
+
 ##############################3
 ## Cleanup
 
