@@ -1,4 +1,4 @@
-# dev-dockers
+# dev-containers
 hold docker files needed for general development.  all based on Ubuntu 24 LTS
 
 
@@ -15,3 +15,7 @@ Verilog simulation libraries using CocoTB and Verilator
 Vitis 2025.1 install.
 Currently downloaded with offline installer for specific devices.
 *  [Install Ref] (https://docs.amd.com/r/en-US/ug973-vivado-release-notes-install-license/Batch-Mode-Installation-Flow)
+
+
+## Notes
+1.  Consider using [podman](https://podman.io/)

@@ -18,7 +18,7 @@ rtl-sim:
 	docker-compose build rtl-sim
 
 rtl-sim-test:
-	docker-compose run -it --rm --name rtl-sim -c "verilator --version"
+	docker-compose run --rm rtl-sim bash -c "verilator --version"
 
 vitis:
 	docker-compose build vitis
