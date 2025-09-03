@@ -43,7 +43,8 @@ RUN wget -N --no-clobber=no https://apt.llvm.org/llvm.sh
 RUN chmod +x llvm.sh
 RUN ./llvm.sh ${LLVM_VERSION} all
 
-RUN # Set up alternatives to make LLVM the default
+# there might be a better way to do this, but let's:
+# Set up alternatives to make LLVM the default
 RUN update-alternatives --install /usr/bin/llvm-config llvm-config /usr/bin/llvm-config-${LLVM_VERSION} 100
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${LLVM_VERSION} 100
 RUN update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-${LLVM_VERSION} 100

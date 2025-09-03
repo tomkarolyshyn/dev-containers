@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   llvm-python:
     build:
@@ -7,8 +5,8 @@ services:
       dockerfile: Dockerfile
       args:
         BASE_IMAGE: ubuntu:24.04
-        LLVM_VERSION: 20
-    image: tomkarolyshyn/llvm-python:latest
+        LLVM_VERSION: ${LLVM_VERSION:-20}
+    image: tomkarolyshyn/llvm-python:3.12-${LLVM_VERSION}
 
   rtl-sim:
     build:
@@ -16,8 +14,8 @@ services:
       dockerfile: Dockerfile
       args:
         BASE_IMAGE: ubuntu:24.04
-        VERILATOR_REV: v5.036
-    image: tomkarolyshyn/rtl-sim:latest
+        VERILATOR_REV: ${VERILATOR_REV}
+    image: tomkarolyshyn/rtl-sim:${VERILATOR_REV}
     container_name: rtl_sim
 
   vitis:
