@@ -19,5 +19,5 @@ Verilog simulation libraries using [cocotb](https://www.cocotb.org/) and [Verila
 Vitis 2025.1 install
 Currently downloaded with offline installer for specific devices.
 
-- [Install Ref] (https://docs.amd.com/r/en-US/ug973-vivado-release-notes-install-license/Batch-Mode-Installation-Flow)
+- [Install Ref](https://docs.amd.com/r/en-US/ug973-vivado-release-notes-install-license/Batch-Mode-Installation-Flow)
 - **Cannot upload to docker hub due to size and license issues.**
