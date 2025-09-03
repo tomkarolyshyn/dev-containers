@@ -9,21 +9,21 @@ help:
 	@echo "  make rtl-sim      - Build the Docker image for rtl simulation"
 
 llvm-python:
-	docker-compose build llvm-python
+	docker compose build llvm-python
 
 llvm-python-test:
-	docker-compose run --rm llvm-python bash -c "clang --version"
+	docker compose run --rm llvm-python bash -c "clang --version"
 
 rtl-sim:
-	docker-compose build rtl-sim
+	docker compose build rtl-sim
 
 rtl-sim-test:
-	docker-compose run --rm rtl-sim bash -c "verilator --version"
+	docker compose run --rm rtl-sim bash -c "verilator --version"
 
 vitis:
-	docker-compose build vitis
+	docker compose build vitis
 
 vitis-run :
-	docker-compose run --rm vitis
+	docker compose run --rm vitis
 all:
-	docker-compose build
+	docker compose build

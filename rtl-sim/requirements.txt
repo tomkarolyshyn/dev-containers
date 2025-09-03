@@ -1,5 +1,7 @@
 numpy
 PyYAML
 pytest
+ruff
+mypy
 cocotb==1.9.2 # for cocotb 1.9.2
 cocotbext-axi
