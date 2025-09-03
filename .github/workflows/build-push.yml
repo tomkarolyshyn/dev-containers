@@ -6,6 +6,16 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      image:
+        description: 'Which image to build'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - llvm-python
+        - rtl-sim
 
 permissions:
   contents: read
@@ -29,9 +39,11 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Build llvm-python image
+        if: github.event.inputs.image == 'all' || github.event.inputs.image == 'llvm-python'
         run: make llvm-python
 
       - name: Build rtl-sim image
+        if: github.event.inputs.image == 'all' || github.event.inputs.image == 'rtl-sim'
         run: make rtl-sim
 
       - name: Push images
