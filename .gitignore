@@ -5,3 +5,5 @@ vitis/viv_2025.1
 vitis/viv_2024.2
 
 *.xz
+
+.secrets

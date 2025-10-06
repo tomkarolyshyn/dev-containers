@@ -6,36 +6,36 @@ ARG LLVM_VERSION=20
 
 # Add LLVM repository for clang 20
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  wget \
-  gnupg \
-  lsb-release \
-  ca-certificates \
-  apt-transport-https \
-  software-properties-common
+    wget \
+    gnupg \
+    lsb-release \
+    ca-certificates \
+    apt-transport-https \
+    software-properties-common
 
-RUN apt-get update ; apt-get install --no-install-recommends \
-  -y \
-  autoconf \
-  automake \
-  cmake \
-  libfreetype6-dev \
-  g++ \
-  gcc \
-  time \
-  libxml2-dev \
-  python3 \
-  python3-pip \
-  python3-venv \
-  python3-dev \
-  make \
-  musl-dev \
-  ninja-build \
-  libncurses5-dev libncursesw5-dev \
-  nano \
-  git \
-  nodejs \
-  libz-dev \
-  libzstd-dev
+RUN apt-get update && apt-get install --no-install-recommends \
+    -y \
+    autoconf \
+    automake \
+    cmake \
+    libfreetype6-dev \
+    g++ \
+    gcc \
+    time \
+    libxml2-dev \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
+    make \
+    musl-dev \
+    ninja-build \
+    libncurses5-dev libncursesw5-dev \
+    nano \
+    git \
+    nodejs \
+    libz-dev \
+    libzstd-dev
 
 RUN echo "Setting up LLVM version $LLVM_VERSION, be sure to run this script with sudo"
 
@@ -72,9 +72,9 @@ WORKDIR /project
 ##############################
 # Cleanup
 RUN \
-  apt-get autoclean && \
-  apt-get autoremove && \
-  rm -rf /var/lib/apt/lists/*
+    apt-get autoclean && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
 
 
 CMD ["bash"]
