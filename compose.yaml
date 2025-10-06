@@ -18,6 +18,18 @@ services:
     image: tomkarolyshyn/rtl-sim:${VERILATOR_REV}
     container_name: rtl_sim
 
+  llvm-verilator:
+    depends_on:
+      - llvm-python
+    build:
+      context: ./rtl-sim
+      dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: tomkarolyshyn/llvm-python:3.12-${LLVM_VERSION}
+        VERILATOR_REV: ${VERILATOR_REV}
+    image: tomkarolyshyn/llvm-verilator:${LLVM_VERSION}-${VERILATOR_REV}
+    container_name: llvm_verilator
+
   vitis:
     build:
       context: ./vitis
