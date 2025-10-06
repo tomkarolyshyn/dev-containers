@@ -38,7 +38,7 @@ vitis-run :
 	docker compose run --rm vitis
 all:
 	docker compose build llvm-python rtl-sim llvm-verilator
-    # Tagging latest for all images, note that
+	# Tagging latest for all images, note that
 	# this may be dangerous if builds fail.
 	docker tag tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION) tomkarolyshyn/llvm-python:latest
 	docker tag tomkarolyshyn/rtl-sim:$(VERILATOR_REV) tomkarolyshyn/rtl-sim:latest
