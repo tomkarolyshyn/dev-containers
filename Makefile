@@ -2,7 +2,7 @@
 include .env
 export
 
-.PHONY: help all llvm-python llvm-python-test rtl-sim vitis rtl-sim-test vitis-run llvm-verilator llvm-ver-test push
+.PHONY: help all llvm-python llvm-python-test rtl-sim vitis rtl-sim-test vitis-run llvm-verilator llvm-ver-test llvm-cuda push
 
 help:
 	@echo "Makefile for building the rtl project using Docker"
@@ -31,6 +31,13 @@ llvm-verilator:
 llvm-ver-test:
 	docker compose run --rm llvm-verilator bash -c "clang --version && verilator --version"
 
+llvm-cuda:
+	docker compose build llvm-cuda
+	docker tag tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION} tomkarolyshyn/llvm-cuda:latest
+
+llvm-cuda-test:
+	docker compose run --rm llvm-cuda bash -c "clang --version && yosys --version"
+
 vitis:
 	docker compose build vitis
 
@@ -50,6 +57,8 @@ push:
 	docker push tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION)
 	docker push tomkarolyshyn/rtl-sim:$(VERILATOR_REV)
 	docker push tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV)
+	docker push tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}
 	docker push tomkarolyshyn/llvm-python:latest
 	docker push tomkarolyshyn/rtl-sim:latest
 	docker push tomkarolyshyn/llvm-verilator:latest
+	docker push tomkarolyshyn/llvm-cuda:latest
