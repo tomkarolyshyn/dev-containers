@@ -2,7 +2,7 @@
 include .env
 export
 
-.PHONY: help all llvm-python llvm-python-test rtl-sim vitis rtl-sim-test vitis-run llvm-verilator llvm-ver-test llvm-cuda push
+.PHONY: help all llvm-python llvm-python-test rtl-sim vitis rtl-sim-test vitis-run llvm-verilator llvm-ver-test llvm-cuda llvm-oss  llvm-oss-test push
 
 help:
 	@echo "Makefile for building the rtl project using Docker"
@@ -24,6 +24,14 @@ rtl-sim:
 rtl-sim-test:
 	docker compose run --rm rtl-sim bash -c "verilator --version"
 
+llvm-oss:
+	docker compose build llvm-oss
+	docker tag tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION) tomkarolyshyn/llvm-oss:latest
+
+llvm-oss-test:
+	docker compose run --rm llvm-oss bash -c "clang --version && yosys --version && verilator --version && uv --version"
+
+
 llvm-verilator:
 	docker compose build llvm-verilator
 	docker tag tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV) tomkarolyshyn/llvm-verilator:latest
@@ -36,7 +44,7 @@ llvm-cuda:
 	docker tag tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION} tomkarolyshyn/llvm-cuda:latest
 
 llvm-cuda-test:
-	docker compose run --rm llvm-cuda bash -c "clang --version && yosys --version"
+	docker compose run --rm llvm-cuda bash -c "clang --version && yosys --version && verilator --version"
 
 vitis:
 	docker compose build vitis
@@ -44,14 +52,14 @@ vitis:
 vitis-run :
 	docker compose run --rm vitis
 all:
-	docker compose build llvm-python rtl-sim llvm-verilator
+	# Build all images, parallel builds through docker compose
+	docker compose build llvm-python rtl-sim llvm-verilator llvm-cuda
 	# Tagging latest for all images, note that
 	# this may be dangerous if builds fail.
 	docker tag tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION) tomkarolyshyn/llvm-python:latest
 	docker tag tomkarolyshyn/rtl-sim:$(VERILATOR_REV) tomkarolyshyn/rtl-sim:latest
 	docker tag tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV) tomkarolyshyn/llvm-verilator:latest
-
-
+	docker tag tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION} tomkarolyshyn/llvm-cuda:latest
 push:
 	# Intentionally skipping vitis image push
 	docker push tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION)
@@ -62,3 +70,5 @@ push:
 	docker push tomkarolyshyn/rtl-sim:latest
 	docker push tomkarolyshyn/llvm-verilator:latest
 	docker push tomkarolyshyn/llvm-cuda:latest
+	docker push tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION)
+	docker push tomkarolyshyn/llvm-oss:latest

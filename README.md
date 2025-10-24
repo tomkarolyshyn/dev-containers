@@ -14,6 +14,12 @@ Verilog simulation libraries using [cocotb](https://www.cocotb.org/) and [Verila
 
 - Posted on [DockerHub](https://hub.docker.com/repository/docker/tomkarolyshyn/rtl-sim/general)
 
+## llvm-oss
+LLVM base image with OSS-CAD-SUITE installed.
+
+## llvm-cuda
+CUDA image with LLVM and OSS installed (full dev build)
+
 ## vitis
 
 Vitis 2025.1 install

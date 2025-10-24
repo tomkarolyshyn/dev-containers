@@ -44,11 +44,20 @@ RUN DEBIAN_FRONTEND=noninteractive TZ=America/New_York apt-get -y install tzdata
 
 
 RUN curl -Ls https://astral.sh/uv/install.sh | sh
-RUN curl -LO https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2025-04-25/oss-cad-suite-linux-x64-20250425.tgz
-RUN mkdir -p /opt
-RUN tar -xzf /oss-cad-suite-linux-x64-20250425.tgz -C /opt
-ENV PATH="/root/.local/bin:/opt/oss-cad-suite/bin:${PATH}"
-RUN rm /oss-cad-suite-linux-x64-20250425.tgz 
+
+
+ARG OSS_CAD_SUITE_VERSION=20251024
+# Convert YYYYMMDD to YYYY-MM-DD format for download URL
+RUN OSS_CAD_SUITE_DATE=$(echo ${OSS_CAD_SUITE_VERSION} | sed 's/^\([0-9]\{4\}\)\([0-9]\{2\}\)\([0-9]\{2\}\)$/\1-\2-\3/') && \
+    echo "Downloading from: https://github.com/YosysHQ/oss-cad-suite-build/releases/download/${OSS_CAD_SUITE_DATE}/oss-cad-suite-linux-x64-${OSS_CAD_SUITE_VERSION}.tgz" && \
+    curl -fsSL -o oss-cad-suite-linux-x64-${OSS_CAD_SUITE_VERSION}.tgz \
+        "https://github.com/YosysHQ/oss-cad-suite-build/releases/download/${OSS_CAD_SUITE_DATE}/oss-cad-suite-linux-x64-${OSS_CAD_SUITE_VERSION}.tgz" && \
+    mkdir -p /opt && \
+    tar -xzf oss-cad-suite-linux-x64-${OSS_CAD_SUITE_VERSION}.tgz -C /opt && \
+    rm oss-cad-suite-linux-x64-${OSS_CAD_SUITE_VERSION}.tgz
+
+ENV PATH="/root/.local/bin:/opt/oss-cad-suite/bin:${PATH}" 
+
   
 
 ARG LLVM_VERSION=20
