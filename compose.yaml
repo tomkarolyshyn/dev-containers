@@ -1,3 +1,5 @@
+# see the .env file for variable definitions
+
 services:
   llvm-python:
     build:
@@ -30,6 +32,29 @@ services:
     image: tomkarolyshyn/llvm-verilator:${LLVM_VERSION}-${VERILATOR_REV}
     container_name: llvm_verilator
 
+  llvm-oss:
+    depends_on:
+      - llvm-python
+    build:
+      context: ./llvm-oss
+      dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: tomkarolyshyn/llvm-python:3.12-${LLVM_VERSION}
+        OSS_CAD_SUITE_VERSION: ${OSS_CAD_SUITE_VERSION}
+    image: tomkarolyshyn/llvm-oss:${LLVM_VERSION}-${OSS_CAD_SUITE_VERSION}
+
+  llvm-cuda:
+    # depends_on:
+    #   - llvm-python
+    build:
+      context: ./llvm-cuda
+      dockerfile: Dockerfile
+      args:
+       BASE_IMAGE: nvidia/cuda:${CUDA_VERSION}-cudnn-runtime-ubuntu24.04
+       LLVM_VERSION: ${LLVM_VERSION}
+    image: tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}
+    container_name: llvm_cuda
+
   vitis:
     build:
       context: ./vitis
@@ -48,3 +73,4 @@ services:
     stdin_open: true
     tty: true
     container_name: vitis
+ 
