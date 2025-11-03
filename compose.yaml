@@ -1,6 +1,17 @@
 # see the .env file for variable definitions
 
 services:
+
+  github-oss:
+    build:
+      context: ./oss
+      dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: ubuntu:24.04
+        OSS_CAD_SUITE_VERSION: ${OSS_CAD_SUITE_VERSION}
+    image: tomkarolyshyn/github-oss:${OSS_CAD_SUITE_VERSION}
+
+
   llvm-python:
     build:
       context: ./llvm-python
@@ -36,7 +47,7 @@ services:
     depends_on:
       - llvm-python
     build:
-      context: ./llvm-oss
+      context: ./oss
       dockerfile: Dockerfile
       args:
         BASE_IMAGE: tomkarolyshyn/llvm-python:3.12-${LLVM_VERSION}
@@ -73,4 +84,3 @@ services:
     stdin_open: true
     tty: true
     container_name: vitis
- 

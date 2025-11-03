@@ -2,13 +2,23 @@
 include .env
 export
 
-.PHONY: help all llvm-python llvm-python-test rtl-sim vitis rtl-sim-test vitis-run llvm-verilator llvm-ver-test llvm-cuda llvm-oss  llvm-oss-test push
+.PHONY: help all llvm-python llvm-python-test rtl-sim vitis rtl-sim-test vitis-run llvm-verilator llvm-ver-test llvm-cuda llvm-oss  llvm-oss-test push github-oss github-oss-test
 
 help:
-	@echo "Makefile for building the rtl project using Docker"
+	@echo "Makefile for building Docker images"
+	@echo "      see the compose.yaml for more details on the Docker images"
 	@echo "Usage:"
 	@echo "  make llvm-python   - Build the Docker image for llvm-python"
 	@echo "  make rtl-sim      - Build the Docker image for rtl simulation"
+	@echo "  make github-oss   - Build the Docker image for github-oss"
+	@echo "  make llvm-oss     - Build the Docker image for llvm-oss"
+	@echo "  make llvm-verilator - Build the Docker image for llvm-verilator"
+	@echo "  make llvm-cuda    - Build the Docker image for llvm-cuda"
+	@echo "  make vitis        - Build the Docker image for vitis"
+	@echo "  make vitis-run    - Run the vitis container"
+	@echo "  make <name>-test  - Test image and get version info"
+	@echo "  make all          - Build all primary images and tag latest"
+	@echo "  make push         - Push images to Docker Hub"
 
 llvm-python:
 	docker compose build llvm-python
@@ -20,6 +30,13 @@ llvm-python-test:
 rtl-sim:
 	docker compose build rtl-sim
 	docker tag tomkarolyshyn/rtl-sim:$(VERILATOR_REV) tomkarolyshyn/rtl-sim:latest
+
+github-oss:
+	docker compose build github-oss
+	docker tag tomkarolyshyn/github-oss:$(OSS_CAD_SUITE_VERSION) tomkarolyshyn/github-oss:latest
+
+github-oss-test:
+	docker compose run --rm github-oss bash -c "yosys --version && verilator --version"
 
 rtl-sim-test:
 	docker compose run --rm rtl-sim bash -c "verilator --version"
@@ -36,7 +53,7 @@ llvm-verilator:
 	docker compose build llvm-verilator
 	docker tag tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV) tomkarolyshyn/llvm-verilator:latest
 
-llvm-ver-test:
+llvm-verilator-test:
 	docker compose run --rm llvm-verilator bash -c "clang --version && verilator --version"
 
 llvm-cuda:
