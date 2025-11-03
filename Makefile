@@ -21,6 +21,10 @@ rtl-sim:
 	docker compose build rtl-sim
 	docker tag tomkarolyshyn/rtl-sim:$(VERILATOR_REV) tomkarolyshyn/rtl-sim:latest
 
+github-oss:
+	docker compose build github-oss
+	docker tag tomkarolyshyn/github-oss:$(OSS_CAD_SUITE_VERSION) tomkarolyshyn/github-oss:latest
+
 rtl-sim-test:
 	docker compose run --rm rtl-sim bash -c "verilator --version"
 
