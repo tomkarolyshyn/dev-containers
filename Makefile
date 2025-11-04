@@ -18,7 +18,7 @@ help:
 	@echo "  make llvm-cuda    - Build the Docker image for llvm-cuda"
 	@echo "  make vitis        - Build the Docker image for vitis"
 	@echo "  make vitis-run    - Run the vitis container"
-	@echo "  make <name>-test  - Test image and get version info"
+	@echo "  make <name>-test - Test CUDA image with explicit GPU access"
 	@echo "  make all          - Build all primary images and tag latest"
 	@echo "  make push         - Push images to Docker Hub"
 
@@ -61,14 +61,16 @@ llvm-cuda:
 	docker compose build llvm-cuda-24
 	docker tag tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION} tomkarolyshyn/llvm-cuda:latest
 
-llvm-cuda-test:
-	docker compose run --rm llvm-cuda bash -c "nvidia-smi && clang --version && yosys --version && verilator --version"
-
 llvm-cuda-22:
 	docker compose build llvm-cuda-22
 	docker tag tomkarolyshyn/llvm-cuda-22:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION} tomkarolyshyn/llvm-cuda-22:latest
 
+llvm-cuda-test:
+	@echo "Testing CUDA 24 container with GPU access (requires GPU)..."
+	docker compose run --rm llvm-cuda-24 bash -c "nvidia-smi && clang --version && yosys --version && verilator --version"
+
 llvm-cuda-22-test:
+	@echo "Testing CUDA 22 container with GPU access (requires GPU)..."
 	docker compose run --rm llvm-cuda-22 bash -c "nvidia-smi && clang --version && yosys --version && verilator --version"
 
 vitis:

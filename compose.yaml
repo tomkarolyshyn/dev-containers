@@ -55,8 +55,6 @@ services:
     image: tomkarolyshyn/llvm-oss:${LLVM_VERSION}-${OSS_CAD_SUITE_VERSION}
 
   llvm-cuda-24:
-    # depends_on:
-    #   - llvm-python
     build:
       context: ./llvm-cuda
       dockerfile: Dockerfile
@@ -65,6 +63,13 @@ services:
        LLVM_VERSION: ${LLVM_VERSION}
     image: tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}
     container_name: llvm_cuda
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   llvm-cuda-22:
     build:
@@ -74,7 +79,14 @@ services:
        BASE_IMAGE: nvidia/cuda:${CUDA_VERSION}-cudnn-runtime-ubuntu22.04
        LLVM_VERSION: ${LLVM_VERSION}
     image: tomkarolyshyn/llvm-cuda-22:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}
-    container_name: llvm_cuda
+    container_name: llvm_cuda_22
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
 
   # vitis:
