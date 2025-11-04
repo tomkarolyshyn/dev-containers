@@ -54,7 +54,7 @@ services:
         OSS_CAD_SUITE_VERSION: ${OSS_CAD_SUITE_VERSION}
     image: tomkarolyshyn/llvm-oss:${LLVM_VERSION}-${OSS_CAD_SUITE_VERSION}
 
-  llvm-cuda:
+  llvm-cuda-24:
     # depends_on:
     #   - llvm-python
     build:
@@ -66,21 +66,32 @@ services:
     image: tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}
     container_name: llvm_cuda
 
-  vitis:
+  llvm-cuda-22:
     build:
-      context: ./vitis
+      context: ./llvm-cuda
       dockerfile: Dockerfile
       args:
-        BASE_IMAGE: ubuntu:24.04
-        VIVADO_DIR: Xilinx_2025.1
-    environment:
-      - DISPLAY=${DISPLAY}
-      - SSH_AUTH_SOCK=/ssh-agent
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix #x11
-      - $SSH_AUTH_SOCK:/ssh-agent
-    image: vitis:2025.1
-    network_mode: host # Optional: Only for Linux
-    stdin_open: true
-    tty: true
-    container_name: vitis
+       BASE_IMAGE: nvidia/cuda:${CUDA_VERSION}-cudnn-runtime-ubuntu22.04
+       LLVM_VERSION: ${LLVM_VERSION}
+    image: tomkarolyshyn/llvm-cuda-22:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}
+    container_name: llvm_cuda
+
+
+  # vitis:
+  #   build:
+  #     context: ./vitis
+  #     dockerfile: Dockerfile
+  #     args:
+  #       BASE_IMAGE: ubuntu:24.04
+  #       VIVADO_DIR: Xilinx_2025.1
+  #   environment:
+  #     - DISPLAY=${DISPLAY}
+  #     - SSH_AUTH_SOCK=/ssh-agent
+  #   volumes:
+  #     - /tmp/.X11-unix:/tmp/.X11-unix #x11
+  #     - $SSH_AUTH_SOCK:/ssh-agent
+  #   image: vitis:2025.1
+  #   network_mode: host # Optional: Only for Linux
+  #   stdin_open: true
+  #   tty: true
+  #   container_name: vitis
