@@ -2,7 +2,7 @@
 include .env
 export
 
-.PHONY: help all llvm-python llvm-python-test rtl-sim vitis rtl-sim-test vitis-run \
+.PHONY: help all launch llvm-python llvm-python-test rtl-sim vitis rtl-sim-test vitis-run \
  llvm-verilator llvm-ver-test llvm-cuda llvm-oss  llvm-oss-test push github-oss github-oss-test \
  llvm-cuda-22 llvm-cuda-22-test
 
@@ -18,9 +18,26 @@ help:
 	@echo "  make llvm-cuda    - Build the Docker image for llvm-cuda"
 	@echo "  make vitis        - Build the Docker image for vitis"
 	@echo "  make vitis-run    - Run the vitis container"
+	@echo "  make launch <service> - Launch a container interactively (e.g., make launch rtl-sim)"
 	@echo "  make <name>-test - Test CUDA image with explicit GPU access"
 	@echo "  make all          - Build all primary images and tag latest"
 	@echo "  make push         - Push images to Docker Hub"
+
+launch:
+	@SERVICE=$$(echo $(filter-out $@,$(MAKECMDGOALS)) | awk '{print $$1}'); \
+	if [ -z "$$SERVICE" ]; then \
+		echo "Usage: make launch <service-name>"; \
+		echo "Available services: llvm-python, rtl-sim, llvm-cuda (or llvm-cuda-24), llvm-cuda-22, llvm-verilator, llvm-oss, github-oss"; \
+		exit 1; \
+	fi; \
+	if [ "$$SERVICE" = "llvm-cuda" ]; then \
+		SERVICE="llvm-cuda-24"; \
+	fi; \
+	docker compose run --no-build --rm $$SERVICE
+
+# Catch-all to prevent Make from trying to build the service name as a target
+%:
+	@:
 
 llvm-python:
 	docker compose build llvm-python

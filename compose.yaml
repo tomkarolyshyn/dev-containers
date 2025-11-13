@@ -61,6 +61,7 @@ services:
       args:
        BASE_IMAGE: nvidia/cuda:${CUDA_VERSION}-cudnn-runtime-ubuntu24.04
        LLVM_VERSION: ${LLVM_VERSION}
+       OSS_CAD_SUITE_VERSION: ${OSS_CAD_SUITE_VERSION}
     image: tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}
     container_name: llvm_cuda
     deploy:
@@ -78,6 +79,7 @@ services:
       args:
        BASE_IMAGE: nvidia/cuda:${CUDA_VERSION}-cudnn-runtime-ubuntu22.04
        LLVM_VERSION: ${LLVM_VERSION}
+       OSS_CAD_SUITE_VERSION: ${OSS_CAD_SUITE_VERSION}
     image: tomkarolyshyn/llvm-cuda-22:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}
     container_name: llvm_cuda_22
     deploy:
