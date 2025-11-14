@@ -97,7 +97,7 @@ vitis-run :
 	docker compose run --rm vitis
 all:
 	# Build all images, parallel builds through docker compose
-	docker compose build llvm-python rtl-sim llvm-verilator llvm-cuda llvm-cuda-22 llvm-oss github-oss
+	docker compose build llvm-python rtl-sim llvm-verilator llvm-cuda-24 llvm-cuda-22 llvm-oss github-oss
 	# Tagging latest for all images, note that
 	# this may be dangerous if builds fail.
 	docker tag tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION) tomkarolyshyn/llvm-python:latest
