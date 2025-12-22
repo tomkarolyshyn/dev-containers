@@ -4,7 +4,7 @@ FROM $BASE_IMAGE
 
 
 # ARG VERILATOR_REV=v5.034
-ARG VIVADO_DIR=Xilinx_2025.1
+ARG INSTALL_DIR=viv_2025.2
 # copy doesn't exand arg, this is a workaround
 # ENV VIVADO_DIR_PATH=${VIVADO_DIR}
 
@@ -15,42 +15,42 @@ ENV DISPLAY=0
 
 # Install packages required for running the vivado installer
 RUN \
-  ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
-  apt-get update -y && \
-  apt-get upgrade -y
+    ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
+    apt-get update -y && \
+    apt-get upgrade -y
 
 RUN \
-  apt-get install -y --no-install-recommends \
-  build-essential \
-  libtinfo-dev \
-  python3-pip \
-  python3-venv \
-  python3-dev \
-  git \
-  make \
-  ca-certificates \
-  locales \
-  lsb-release \
-  net-tools \
-  patch \
-  pigz \
-  unzip \
-  wget \
-  libc6-dev-i386 net-tools \
-  graphviz \
-  make \
-  unzip \
-  zip \
-  g++ \
-  xvfb \
-  git \
-  openssh-client \
-  libc6-dev-i386 \
-  libnss3-dev \
-  libgdk-pixbuf2.0-dev \
-  libgtk-3-dev \
-  libxss-dev  \
-  fdisk
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    libtinfo-dev \
+    python3-pip \
+    python3-venv \
+    python3-dev \
+    git \
+    make \
+    ca-certificates \
+    locales \
+    lsb-release \
+    net-tools \
+    patch \
+    pigz \
+    unzip \
+    wget \
+    libc6-dev-i386 net-tools \
+    graphviz \
+    make \
+    unzip \
+    zip \
+    g++ \
+    xvfb \
+    git \
+    openssh-client \
+    libc6-dev-i386 \
+    libnss3-dev \
+    libgdk-pixbuf2.0-dev \
+    libgtk-3-dev \
+    libxss-dev  \
+    fdisk
 
 
 ##############################3
@@ -72,23 +72,26 @@ RUN mkdir -p /viv_install
 COPY vitis_fix.sh /viv_install/vitis_fix.sh
 COPY install_config.txt /viv_install/install_config.txt
 
-RUN --mount=type=bind,source=$VIVADO_DIR,target=/$VIVADO_DIR \
-  cd /$VIVADO_DIR  && ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
+RUN --mount=type=bind,source=$INSTALL_DIR,target=/$INSTALL_DIR \
+    cd /$INSTALL_DIR && ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
 
 # RUN cd /viv_install  && \
 #      ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
 
-RUN /viv_install/vitis_fix.sh
+# RUN /viv_install/vitis_fix.sh
+
+# <install_location>/Xilinx/202x.x/Vivado/scripts and/or <install_location>/Xilinx/202x.x/Vitis scripts.
+RUN /tools/Xilinx/2025.2/Vivado/scripts/installLibs.sh
 
 ##############################3
 ## Cleanup
 
 RUN \
-  apt-get autoclean && \
-  apt-get autoremove && \
-  locale-gen en_US.UTF-8 && \
-  update-locale LANG=en_US.UTF-8 && \
-  rm -rf /var/lib/apt/lists/*
+    apt-get autoclean && \
+    apt-get autoremove && \
+    locale-gen en_US.UTF-8 && \
+    update-locale LANG=en_US.UTF-8 && \
+    rm -rf /var/lib/apt/lists/*
 
 ##############################3
 #
@@ -104,6 +107,6 @@ RUN git config --global --add safe.directory /project
 # COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 
 # CMD ["/bin/bash", "-l"]
-CMD ["bash", "-c", "source /tools/Xilinx/2025.1/Vitis/settings64.sh && exec bash"]
+CMD ["bash", "-c", "source /tools/Xilinx/2025.2/Vivado/settings64.sh && exec bash"]
 
 # ENTRYPOINT ["/entrypoint.sh"]

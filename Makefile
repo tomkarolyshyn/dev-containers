@@ -2,7 +2,7 @@
 include .env
 export
 
-.PHONY: help all launch llvm-python llvm-python-test rtl-sim vitis rtl-sim-test vitis-run \
+.PHONY: help all launch llvm-python llvm-python-test rtl-sim vivado rtl-sim-test vivado-run \
  llvm-verilator llvm-ver-test llvm-cuda llvm-oss  llvm-oss-test push github-oss github-oss-test \
  llvm-cuda-22 llvm-cuda-22-test
 
@@ -16,8 +16,8 @@ help:
 	@echo "  make llvm-oss     - Build the Docker image for llvm-oss"
 	@echo "  make llvm-verilator - Build the Docker image for llvm-verilator"
 	@echo "  make llvm-cuda    - Build the Docker image for llvm-cuda"
-	@echo "  make vitis        - Build the Docker image for vitis"
-	@echo "  make vitis-run    - Run the vitis container"
+	@echo "  make vivado        - Build the Docker image for vivado"
+	@echo "  make vivado-run    - Run the vivado container"
 	@echo "  make launch <service> - Launch a container interactively (e.g., make launch rtl-sim)"
 	@echo "  make <name>-test - Test CUDA image with explicit GPU access"
 	@echo "  make all          - Build all primary images and tag latest"
@@ -90,11 +90,11 @@ llvm-cuda-22-test:
 	@echo "Testing CUDA 22 container with GPU access (requires GPU)..."
 	docker compose run --rm llvm-cuda-22 bash -c "nvidia-smi && clang --version && yosys --version && verilator --version"
 
-vitis:
-	docker compose build vitis
+vivado:
+	docker compose build vivado
 
-vitis-run :
-	docker compose run --rm vitis
+vivado-run :
+	docker compose run --rm vivado
 all:
 	# Build all images, parallel builds through docker compose
 	docker compose build llvm-python rtl-sim llvm-verilator llvm-cuda-24 llvm-cuda-22 llvm-oss github-oss
@@ -107,7 +107,7 @@ all:
 	docker tag tomkarolyshyn/llvm-cuda-22:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION} tomkarolyshyn/llvm-cuda-22:latest
 	docker tag tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION) tomkarolyshyn/llvm-oss:latest
 push:
-	# Intentionally skipping vitis image push
+	# Intentionally skipping vivado image push
 	docker push tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION)
 	docker push tomkarolyshyn/rtl-sim:$(VERILATOR_REV)
 	docker push tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV)
