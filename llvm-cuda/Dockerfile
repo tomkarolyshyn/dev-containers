@@ -1,8 +1,8 @@
 ARG BASE_IMAGE=nvidia/cuda:12.8.1-cudnn-runtime-ubuntu24.04
 FROM $BASE_IMAGE
 
-RUN apt-get update 
- 
+RUN apt-get update
+
 
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     lsb-release \
     ca-certificates \
     apt-transport-https \
-    software-properties-common 
+    software-properties-common
 
 RUN apt-get update && apt-get install --no-install-recommends \
     -y \
@@ -38,7 +38,7 @@ RUN apt-get update && apt-get install --no-install-recommends \
     libz-dev \
     libzstd-dev
 
-RUN apt-get install -y  telnet dnsutils net-tools 
+RUN apt-get install -y  telnet dnsutils net-tools
 
 RUN DEBIAN_FRONTEND=noninteractive TZ=America/New_York apt-get -y install tzdata
 
@@ -56,9 +56,9 @@ RUN OSS_CAD_SUITE_DATE=$(echo ${OSS_CAD_SUITE_VERSION} | sed 's/^\([0-9]\{4\}\)\
     tar -xzf oss-cad-suite-linux-x64-${OSS_CAD_SUITE_VERSION}.tgz -C /opt && \
     rm oss-cad-suite-linux-x64-${OSS_CAD_SUITE_VERSION}.tgz
 
-ENV PATH="/root/.local/bin:/opt/oss-cad-suite/bin:${PATH}" 
+ENV PATH="/root/.local/bin:/opt/oss-cad-suite/bin:${PATH}"
 
-  
+
 
 ARG LLVM_VERSION=20
 
@@ -80,6 +80,7 @@ RUN update-alternatives --install /usr/bin/lld lld /usr/bin/lld-${LLVM_VERSION} 
 RUN update-alternatives --install /usr/bin/lldb lldb /usr/bin/lldb-${LLVM_VERSION} 100
 RUN update-alternatives --install /usr/bin/intercept-build intercept-build /usr/bin/intercept-build-${LLVM_VERSION} 100
 RUN update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-${LLVM_VERSION} 100
+RUN update-alternatives --install /usr/bin/opt opt /usr/bin/opt-${LLVM_VERSION} 100
 
 
 ##############################
