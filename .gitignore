@@ -6,5 +6,6 @@ vitis/viv_2024.2
 
 *.xz
 
-.secrets 
+.secrets
 
+vivado/viv_*/

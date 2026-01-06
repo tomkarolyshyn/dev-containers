@@ -44,7 +44,7 @@ llvm-python:
 	docker tag tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION) tomkarolyshyn/llvm-python:latest
 
 llvm-python-test:
-	docker compose run --rm llvm-python bash -c "clang --version"
+	docker compose run --rm llvm-python bash -c "clang --version && opt --version"
 
 rtl-sim:
 	docker compose build rtl-sim
