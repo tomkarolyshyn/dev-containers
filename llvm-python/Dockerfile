@@ -55,6 +55,8 @@ RUN update-alternatives --install /usr/bin/lld lld /usr/bin/lld-${LLVM_VERSION} 
 RUN update-alternatives --install /usr/bin/lldb lldb /usr/bin/lldb-${LLVM_VERSION} 100
 RUN update-alternatives --install /usr/bin/intercept-build intercept-build /usr/bin/intercept-build-${LLVM_VERSION} 100
 RUN update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-${LLVM_VERSION} 100
+RUN update-alternatives --install /usr/bin/opt opt /usr/bin/opt-${LLVM_VERSION} 100
+
 
 
 # install some python packages,
