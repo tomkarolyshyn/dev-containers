@@ -103,11 +103,10 @@ push:
 	docker push tomkarolyshyn/rtl-sim:$(VERILATOR_REV)
 	docker push tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV)
 	docker push tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}
+	docker push tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION)
 
 	docker push tomkarolyshyn/llvm-python:latest
 	docker push tomkarolyshyn/rtl-sim:latest
 	docker push tomkarolyshyn/llvm-verilator:latest
 	docker push tomkarolyshyn/llvm-cuda:latest
-	docker push tomkarolyshyn/llvm-cuda-22:latest
-	docker push tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION)
 	docker push tomkarolyshyn/llvm-oss:latest
