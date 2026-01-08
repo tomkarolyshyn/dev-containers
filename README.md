@@ -49,6 +49,7 @@ The vitis image is currently based of the base Ubuntu image, but certainly modif
     - Select "Selected Product Only" (to reduce size)
     - Enter desired save location (ie : /home/USERNAME/Downloads/vitis_2025.2)
     - Click **Next>**
+    - ℹ️ Alternatively just select "Full image download" and skip next 3 steps.  It is about 90GB, but install should be downselected via the config file.
 3. Select **Vitis**, Click **Next>**
 4. Click **Next>** again (for **Vitis Unified Software Platform**)
 5. Select Desired components (example below selects 6️⃣ devices):
@@ -73,10 +74,13 @@ The vitis image is currently based of the base Ubuntu image, but certainly modif
     ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --location ${HOME}/Xilinx-test --config ../install_config.txt
     ```
 9.  Now you're ready to build the docker.
+    - make vitis-build
+    - ...wait
+    - creates a 95GB docker image.
 
 
 ![Install screen shot](./vitis/install_screenshot.png)
 
 
 
-_NOTE_: **Cannot upload to the vitis image docker hub due to size and license issues.**
+ℹ️ : **Cannot upload the vitis image to docker hub due to size and license issues.**
