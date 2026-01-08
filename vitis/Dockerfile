@@ -71,13 +71,14 @@ RUN apt-get install -y x11-apps xauth
 
 RUN mkdir -p /tmp_install
 # COPY vitis_fix.sh /tmp_install/vitis_fix.sh
-# COPY install_config.txt /tmp_install/install_config.txt
+COPY install_config.txt /tmp_install/install_config.txt
 
 RUN --mount=type=bind,source=$INSTALL_DIR,target=/tmp_install/$INSTALL_DIR \
-    cd /tmp_install/$INSTALL_DIR && ./xsetup \
+    cd /tmp_install/$INSTALL_DIR && \
+    ./xsetup \
     --agree 3rdPartyEULA,XilinxEULA \
+    --config /tmp_install/install_config.txt \
     --batch Install --location "/tools/Xilinx"
-
 
 ##############################3
 ## Cleanup

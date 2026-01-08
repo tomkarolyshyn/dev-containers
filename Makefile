@@ -83,7 +83,7 @@ llvm-cuda-test:
 	docker compose run --rm llvm-cuda-24 bash -c "nvidia-smi && clang --version && yosys --version && verilator --version"
 
 vitis:
-	docker compose build vitis
+	docker compose build --progress=plain vitis
 
 vitis-run :
 	docker compose run --rm vitis
