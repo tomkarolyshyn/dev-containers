@@ -3,8 +3,8 @@ ARG BASE_IMAGE=ubuntu:24.04
 FROM $BASE_IMAGE
 
 
-# ARG VERILATOR_REV=v5.034
-ARG INSTALL_DIR=viv_2025.2
+# folder where the pre-download files are for copying into the container
+ARG INSTALL_DIR=vitis_2025.2
 # copy doesn't exand arg, this is a workaround
 # ENV VIVADO_DIR_PATH=${VIVADO_DIR}
 
@@ -19,10 +19,13 @@ RUN \
     apt-get update -y && \
     apt-get upgrade -y
 
+
+# libs have been taken from Xilinx's installLibs.sh script (for 2025.2)
 RUN \
     apt-get install -y --no-install-recommends \
     build-essential \
     libtinfo-dev \
+    libncurses5-dev \
     python3-pip \
     python3-venv \
     python3-dev \
@@ -38,10 +41,7 @@ RUN \
     wget \
     libc6-dev-i386 net-tools \
     graphviz \
-    make \
-    unzip \
     zip \
-    g++ \
     xvfb \
     git \
     openssh-client \
@@ -50,8 +50,9 @@ RUN \
     libgdk-pixbuf2.0-dev \
     libgtk-3-dev \
     libxss-dev  \
-    fdisk
-
+    fdisk \
+    openssl \
+    libsecret-1-dev
 
 ##############################3
 ## SSH Setup
@@ -68,20 +69,15 @@ RUN apt-get install -y x11-apps xauth
 ##########################
 ## Vivado/Vitis Setup
 
-RUN mkdir -p /viv_install
-COPY vitis_fix.sh /viv_install/vitis_fix.sh
-COPY install_config.txt /viv_install/install_config.txt
+RUN mkdir -p /tmp_install
+# COPY vitis_fix.sh /tmp_install/vitis_fix.sh
+# COPY install_config.txt /tmp_install/install_config.txt
 
-RUN --mount=type=bind,source=$INSTALL_DIR,target=/$INSTALL_DIR \
-    cd /$INSTALL_DIR && ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
+RUN --mount=type=bind,source=$INSTALL_DIR,target=/tmp_install/$INSTALL_DIR \
+    cd /tmp_install/$INSTALL_DIR && ./xsetup \
+    --agree 3rdPartyEULA,XilinxEULA \
+    --batch Install --location "/tools/Xilinx"
 
-# RUN cd /viv_install  && \
-#      ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
-
-# RUN /viv_install/vitis_fix.sh
-
-# <install_location>/Xilinx/202x.x/Vivado/scripts and/or <install_location>/Xilinx/202x.x/Vitis scripts.
-RUN /tools/Xilinx/2025.2/Vivado/scripts/installLibs.sh
 
 ##############################3
 ## Cleanup
@@ -107,6 +103,6 @@ RUN git config --global --add safe.directory /project
 # COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 
 # CMD ["/bin/bash", "-l"]
-CMD ["bash", "-c", "source /tools/Xilinx/2025.2/Vivado/settings64.sh && exec bash"]
+CMD ["bash", "-c", "source /tools/Xilinx/2025.2/Vitis/settings64.sh && exec bash"]
 
 # ENTRYPOINT ["/entrypoint.sh"]
