@@ -29,21 +29,19 @@ RUN \
     python3-pip \
     python3-venv \
     python3-dev \
-    git \
-    make \
     ca-certificates \
-    locales \
     lsb-release \
     net-tools \
     patch \
     pigz \
     unzip \
     wget \
-    libc6-dev-i386 net-tools \
     graphviz \
     zip \
     xvfb \
     git \
+    file \
+    locales \
     openssh-client \
     libc6-dev-i386 \
     libnss3-dev \
@@ -52,6 +50,8 @@ RUN \
     libxss-dev  \
     fdisk \
     openssl \
+    x11-apps \
+    xauth \
     libsecret-1-dev
 
 ##############################3
@@ -65,7 +65,19 @@ RUN chmod 700 /root/.ssh
 # Avoid SSH host authenticity prompt
 RUN touch /root/.ssh/config && echo "StrictHostKeyChecking no" >> /root/.ssh/config
 
-RUN apt-get install -y x11-apps xauth
+
+########################
+## Locale setup
+    # TBD on whether this is needed.
+
+# COPY /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive
+
+# # Set environment variables
+# ENV LANG=en_US.UTF-8
+# ENV LC_ALL=en_US.UTF-8
+RUN locale-gen en_US.UTF-8 && \
+    update-locale LANG=en_US.UTF-8
+
 ##########################
 ## Vivado/Vitis Setup
 
@@ -78,7 +90,8 @@ RUN --mount=type=bind,source=$INSTALL_DIR,target=/tmp_install/$INSTALL_DIR \
     ./xsetup \
     --agree 3rdPartyEULA,XilinxEULA \
     --config /tmp_install/install_config.txt \
-    --batch Install --location "/tools/Xilinx"
+    --batch Install \
+    --location "/tools/Xilinx"
 
 ##############################3
 ## Cleanup
@@ -86,8 +99,6 @@ RUN --mount=type=bind,source=$INSTALL_DIR,target=/tmp_install/$INSTALL_DIR \
 RUN \
     apt-get autoclean && \
     apt-get autoremove && \
-    locale-gen en_US.UTF-8 && \
-    update-locale LANG=en_US.UTF-8 && \
     rm -rf /var/lib/apt/lists/*
 
 ##############################3

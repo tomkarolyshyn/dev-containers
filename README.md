@@ -4,20 +4,25 @@ Docker files needed for general development.
 
 Versions are set in the .env file and loaded by the docker compose.
 
-## llvm-python
-
-LLVM 20 and python3.12
-
-- Posted on [DockerHub](https://hub.docker.com/repository/docker/tomkarolyshyn/llvm-python/general)
-
 ## rtl-sim
 
 Verilog simulation libraries using [cocotb](https://www.cocotb.org/) and [Verilator](https://verilator.org/guide/latest/index.html)
 
 - Posted on [DockerHub](https://hub.docker.com/repository/docker/tomkarolyshyn/rtl-sim/general)
 
+
+## llvm-python
+
+LLVM 20 and python3.12
+
+- Posted on [DockerHub](https://hub.docker.com/repository/docker/tomkarolyshyn/llvm-python/general)
+
+## llvm-verilator
+
+llvm-python with verilator installed (same method as rtl-sim but different base image)
+
 ## llvm-oss
-LLVM base image with OSS-CAD-SUITE installed.
+llvm-python base image with OSS-CAD-SUITE installed.
 
 ## llvm-cuda
 CUDA image with LLVM and OSS installed (full dev build), for Ubuntu 24 LTS.
@@ -47,16 +52,16 @@ The vitis image is currently based of the base Ubuntu image, but certainly modif
 3. Select **Vitis**, Click **Next>**
 4. Click **Next>** again (for **Vitis Unified Software Platform**)
 5. Select Desired components (example below selects 6️⃣ devices):
-    - **SOCs**
-        - Zynq-7000
-        - Zynq Ultrascale+ MPSoC's
     - **7 Series**
         - Artix-7 FPGAs
         - Spartan-7 FPGAs
+    - **SOCs**
+        - Zynq-7000
+        - Zynq Ultrascale+ MPSoC's
     - **Ultrascale+**
         - Artix Ultrascale+ FPGAs
-        - Spartan Ultrascale+ FPGAs
-    - Un-check "Add or Manage a License Key"
+        - Spartan Ultrascale+
+    - Remove "Add or Manage a License Key"
     - Click **Next>**
 6. Final page, Click **Download** ... and wait
     - Quoted download size ~33GB.
@@ -65,11 +70,13 @@ The vitis image is currently based of the base Ubuntu image, but certainly modif
     - you can check this by running to install, and look for warnings.
     ```bash
     cd vitis/vitis_2025.2
-    ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --location ${HOME}/Xilinx-test" --edition "Vitis Unified Software Platform" --config ../install_config.txt
+    ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --location ${HOME}/Xilinx-test --config ../install_config.txt
     ```
 9.  Now you're ready to build the docker.
 
 
+![Install screen shot](./vitis/install_screenshot.png)
 
 
-_NOTE_: **Cannot upload to docker hub due to size and license issues.**
+
+_NOTE_: **Cannot upload to the vitis image docker hub due to size and license issues.**

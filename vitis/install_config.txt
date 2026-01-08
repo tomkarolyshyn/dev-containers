@@ -7,7 +7,7 @@ Product=Vitis
 Destination=/tools/Xilinx
 
 # Choose the Products/Devices the you would like to install.
-Modules=DocNav:0, Zynq UltraScale+ MPSoCs:1, Zynq-7000 All Programmable SoC:1,Spartan-7 FPGAs:1,Artix UltraScale+ FPGAs:1,Spartan UltraScale+:1,Artix-7 FPGAs:1
+Modules= Zynq UltraScale+ MPSoCs:0, Zynq-7000 All Programmable SoC:1, Spartan-7 FPGAs:1, Artix-7 FPGAs:1, Artix UltraScale+ FPGAs:1, Spartan UltraScale+:1,Vitis Model Composer(A toolbox for Simulink):1
 
 # Choose the post install scripts you'd like to run as part of the finalization step. Please note that some of these scripts may require user interaction during runtime.
 InstallOptions=Acquire or Manage a License Key:0
