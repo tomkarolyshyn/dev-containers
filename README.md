@@ -30,7 +30,7 @@ Be sure to follow the [instructions](https://docs.nvidia.com/datacenter/cloud-na
 
 ## vitis
 
-Vitis 2025.1 install
+Vitis 2025.2 install
 Currently downloaded with offline installer for specific devices.
 
 - [Install Ref](https://docs.amd.com/r/en-US/ug973-vivado-release-notes-install-license/Batch-Mode-Installation-Flow)
