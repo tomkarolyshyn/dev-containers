@@ -48,8 +48,8 @@ The vitis image is currently based of the base Ubuntu image, but certainly modif
     - Select "Download Image (Install Separately)"
     <!-- - Select "Selected Product Only" (to reduce size) -->
     - Enter desired save location (ie : /home/USERNAME/Downloads/vitis_2025.2)
-
-    - ℹ️ Select "Full image download". for configurability going forward.  We will down-select on install.
+    - ℹ️ Select "Full Image" for the download.
+        - See [install_config.txt](./vitis/install_config.txt) for customization on the docker installation.
     - Click **Next>**
 <!-- 3. Select **Vitis**, Click **Next>** -->
 <!-- 4. Click **Next>** again (for **Vitis Unified Software Platform**) -->
@@ -67,15 +67,17 @@ The vitis image is currently based of the base Ubuntu image, but certainly modif
     - Click **Next>**
 -->
 6. Final page, Click **Download** ... and wait
-    - Quoted download size ~93GB.
+    - Quoted download size ~85GB.
 7. Move the downloaded folder to dev-containers/vitis/vitis_2025.2
-8. Update the [install_config.txt](./vitis/install_config.txt) to reflect required devices selected above.
+8. Update the [install_config.txt](./vitis/install_config.txt) to reflect required devices.
+    - Defaults will work for current projects.
     - you can check this by running to install, and look for warnings.
     ```bash
     cd vitis/vitis_2025.2
     ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --location ${HOME}/Xilinx-test --config ../install_config.txt
     ```
-9.  Now you're ready to build the docker.
+    - It will print any warnings, and you can cancel once installation starts (if desired).
+10.  Now you're ready to build the docker.
     - make vitis-build
     - ...wait
     - creates a 62GB docker image.
