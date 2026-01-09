@@ -46,13 +46,14 @@ The vitis image is currently based of the base Ubuntu image, but certainly modif
 2. Run the tool setup tool :
     - Enter login information
     - Select "Download Image (Install Separately)"
-    - Select "Selected Product Only" (to reduce size)
+    <!-- - Select "Selected Product Only" (to reduce size) -->
     - Enter desired save location (ie : /home/USERNAME/Downloads/vitis_2025.2)
+
+    - ℹ️ Select "Full image download". for configurability going forward.  We will down-select on install.
     - Click **Next>**
-    - ℹ️ Alternatively just select "Full image download" and skip next 3 steps.  It is about 90GB, but install should be downselected via the config file.
-3. Select **Vitis**, Click **Next>**
-4. Click **Next>** again (for **Vitis Unified Software Platform**)
-5. Select Desired components (example below selects 6️⃣ devices):
+<!-- 3. Select **Vitis**, Click **Next>** -->
+<!-- 4. Click **Next>** again (for **Vitis Unified Software Platform**) -->
+<!-- 5. Select Desired components (example below selects 6️⃣ devices):
     - **7 Series**
         - Artix-7 FPGAs
         - Spartan-7 FPGAs
@@ -64,8 +65,9 @@ The vitis image is currently based of the base Ubuntu image, but certainly modif
         - Spartan Ultrascale+
     - Remove "Add or Manage a License Key"
     - Click **Next>**
+-->
 6. Final page, Click **Download** ... and wait
-    - Quoted download size ~33GB.
+    - Quoted download size ~93GB.
 7. Move the downloaded folder to dev-containers/vitis/vitis_2025.2
 8. Update the [install_config.txt](./vitis/install_config.txt) to reflect required devices selected above.
     - you can check this by running to install, and look for warnings.
@@ -76,10 +78,9 @@ The vitis image is currently based of the base Ubuntu image, but certainly modif
 9.  Now you're ready to build the docker.
     - make vitis-build
     - ...wait
-    - creates a 95GB docker image.
+    - creates a 62GB docker image.
 
-
-![Install screen shot](./vitis/install_screenshot.png)
+<!-- ![Install screen shot](./vitis/install_screenshot.png) -->
 
 
 
