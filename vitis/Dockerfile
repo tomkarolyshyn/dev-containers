@@ -3,8 +3,8 @@ ARG BASE_IMAGE=ubuntu:24.04
 FROM $BASE_IMAGE
 
 
-# ARG VERILATOR_REV=v5.034
-ARG VIVADO_DIR=Xilinx_2025.1
+# folder where the pre-download files are for copying into the container
+ARG INSTALL_DIR=vitis_2025.2
 # copy doesn't exand arg, this is a workaround
 # ENV VIVADO_DIR_PATH=${VIVADO_DIR}
 
@@ -15,43 +15,44 @@ ENV DISPLAY=0
 
 # Install packages required for running the vivado installer
 RUN \
-  ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
-  apt-get update -y && \
-  apt-get upgrade -y
+    ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
+    apt-get update -y && \
+    apt-get upgrade -y
 
+
+# libs have been taken from Xilinx's installLibs.sh script (for 2025.2)
 RUN \
-  apt-get install -y --no-install-recommends \
-  build-essential \
-  libtinfo-dev \
-  python3-pip \
-  python3-venv \
-  python3-dev \
-  git \
-  make \
-  ca-certificates \
-  locales \
-  lsb-release \
-  net-tools \
-  patch \
-  pigz \
-  unzip \
-  wget \
-  libc6-dev-i386 net-tools \
-  graphviz \
-  make \
-  unzip \
-  zip \
-  g++ \
-  xvfb \
-  git \
-  openssh-client \
-  libc6-dev-i386 \
-  libnss3-dev \
-  libgdk-pixbuf2.0-dev \
-  libgtk-3-dev \
-  libxss-dev  \
-  fdisk
-
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    libtinfo-dev \
+    libncurses5-dev \
+    python3-pip \
+    python3-venv \
+    python3-dev \
+    ca-certificates \
+    lsb-release \
+    net-tools \
+    patch \
+    pigz \
+    unzip \
+    wget \
+    graphviz \
+    zip \
+    xvfb \
+    git \
+    file \
+    locales \
+    openssh-client \
+    libc6-dev-i386 \
+    libnss3-dev \
+    libgdk-pixbuf2.0-dev \
+    libgtk-3-dev \
+    libxss-dev  \
+    fdisk \
+    openssl \
+    x11-apps \
+    xauth \
+    libsecret-1-dev
 
 ##############################3
 ## SSH Setup
@@ -64,31 +65,41 @@ RUN chmod 700 /root/.ssh
 # Avoid SSH host authenticity prompt
 RUN touch /root/.ssh/config && echo "StrictHostKeyChecking no" >> /root/.ssh/config
 
-RUN apt-get install -y x11-apps xauth
+
+########################
+## Locale setup
+    # TBD on whether this is needed.
+
+# COPY /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive
+
+# # Set environment variables
+# ENV LANG=en_US.UTF-8
+# ENV LC_ALL=en_US.UTF-8
+RUN locale-gen en_US.UTF-8 && \
+    update-locale LANG=en_US.UTF-8
+
 ##########################
 ## Vivado/Vitis Setup
 
-RUN mkdir -p /viv_install
-COPY vitis_fix.sh /viv_install/vitis_fix.sh
-COPY install_config.txt /viv_install/install_config.txt
+RUN mkdir -p /tmp_install
+# COPY vitis_fix.sh /tmp_install/vitis_fix.sh
+COPY install_config.txt /tmp_install/install_config.txt
 
-RUN --mount=type=bind,source=$VIVADO_DIR,target=/$VIVADO_DIR \
-  cd /$VIVADO_DIR  && ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
-
-# RUN cd /viv_install  && \
-#      ./xsetup --agree 3rdPartyEULA,XilinxEULA --batch Install --config /viv_install/install_config.txt
-
-RUN /viv_install/vitis_fix.sh
+RUN --mount=type=bind,source=$INSTALL_DIR,target=/tmp_install/$INSTALL_DIR \
+    cd /tmp_install/$INSTALL_DIR && \
+    ./xsetup \
+    --agree 3rdPartyEULA,XilinxEULA \
+    --config /tmp_install/install_config.txt \
+    --batch Install \
+    --location "/tools/Xilinx"
 
 ##############################3
 ## Cleanup
 
 RUN \
-  apt-get autoclean && \
-  apt-get autoremove && \
-  locale-gen en_US.UTF-8 && \
-  update-locale LANG=en_US.UTF-8 && \
-  rm -rf /var/lib/apt/lists/*
+    apt-get autoclean && \
+    apt-get autoremove && \
+    rm -rf /var/lib/apt/lists/*
 
 ##############################3
 #
@@ -104,6 +115,6 @@ RUN git config --global --add safe.directory /project
 # COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 
 # CMD ["/bin/bash", "-l"]
-CMD ["bash", "-c", "source /tools/Xilinx/2025.1/Vitis/settings64.sh && exec bash"]
+CMD ["bash", "-c", "source /tools/Xilinx/2025.2/Vitis/settings64.sh && exec bash"]
 
 # ENTRYPOINT ["/entrypoint.sh"]
