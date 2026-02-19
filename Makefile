@@ -104,7 +104,7 @@ vitis-run:
 	docker compose run --rm vitis
 
 vitis-test:
-	docker compose run --rm vitis bash -c "source /tools/Xilinx/2025.2/Vitis/settings64.sh && vivado -version && vitis --version"
+	docker compose run --rm vitis bash -c "vivado -version && vitis --version"
 
 ##########################
 # Build all

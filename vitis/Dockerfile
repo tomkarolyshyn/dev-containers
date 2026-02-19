@@ -111,10 +111,12 @@ WORKDIR /project
 
 RUN git config --global --add safe.directory /project
 
+RUN echo "source /tools/Xilinx/2025.2/Vitis/settings64.sh" >> /etc/bash.bashrc
 # Ensure that we're using bash for interactive sessions
 # COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 
-# CMD ["/bin/bash", "-l"]
-CMD ["bash", "-c", "source /tools/Xilinx/2025.2/Vitis/settings64.sh && exec bash"]
+
+CMD ["/bin/bash", "-l"]
+# CMD ["bash", "-c", "source /tools/Xilinx/2025.2/Vitis/settings64.sh && exec bash"]
 
 # ENTRYPOINT ["/entrypoint.sh"]

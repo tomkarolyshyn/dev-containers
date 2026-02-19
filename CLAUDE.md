@@ -48,7 +48,10 @@ ubuntu:24.04 → vitis        (AMD Xilinx Vitis/Vivado 2025.2, local only, not p
 ### Key Patterns
 
 - **Version pins**: All tool versions are centralized in `.env` (loaded by both Makefile and compose.yaml). Edit `.env` to bump versions.
-- **Parameterized base images**: Every Dockerfile uses `ARG BASE_IMAGE`, allowing the same Dockerfile to produce different layered images (e.g., `rtl-sim/Dockerfile` builds both `rtl-sim` and `llvm-verilator`).
+- **Parameterized base images**: Every Dockerfile uses `ARG BASE_IMAGE`, allowing the same Dockerfile to produce different layered images (e.g., `rtl-sim/Dockerfile` builds both `rtl-sim` and `llvm-verilator` by passing different `BASE_IMAGE` values in `compose.yaml`).
+- **Shared Dockerfiles**: `rtl-sim/Dockerfile` is used by both the `rtl-sim` and `llvm-verilator` compose services. Changes to that Dockerfile affect both images.
+- **Build ordering**: `llvm-verilator` and `llvm-oss` declare `depends_on: llvm-python` in compose.yaml, so `llvm-python` must be built first. The `all` target handles this via `docker compose build`.
+- **Self-contained `llvm-cuda`**: This image does NOT inherit from `llvm-python`; it independently installs LLVM and OSS-CAD-Suite on top of `nvidia/cuda`. Changes to `llvm-python` or `oss` Dockerfiles may need to be mirrored here.
 - **Vitis bind-mount build**: The large AMD installer is `bind`-mounted at build time (`RUN --mount=type=bind`) to avoid bloating image layers. Installer directories are gitignored.
 - **Tag scheme**: Tags encode version info (e.g., `3.12-20` for llvm-python, `20-v5.040` for llvm-verilator). All images also get a `latest` tag.
 - **WORKDIR**: Most images use `/project`; `oss` uses `/app`.
@@ -67,4 +70,5 @@ ubuntu:24.04 → vitis        (AMD Xilinx Vitis/Vivado 2025.2, local only, not p
 
 - No CI/CD; builds and pushes are manual via `make`.
 - `llvm-cuda` build/run requires Nvidia Container Toolkit for GPU access.
-- `vitis` is never pushed to DockerHub (62+ GB, licensing restrictions).
+- `vitis` is never pushed to DockerHub (62+ GB, licensing restrictions). Running it requires X11 forwarding, SSH agent socket, and `network_mode: host` (configured in compose.yaml).
+- `PUSH_IMAGES` in the Makefile controls which images get pushed — `vitis` is excluded.
