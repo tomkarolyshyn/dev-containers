@@ -7,6 +7,7 @@ ARG LLVM_VERSION=20
 # Add LLVM repository for clang 20
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
+    curl \
     gnupg \
     lsb-release \
     ca-certificates \
@@ -33,9 +34,30 @@ RUN apt-get update && apt-get install --no-install-recommends \
     libncurses5-dev libncursesw5-dev \
     nano \
     git \
-    nodejs \
     libz-dev \
     libzstd-dev
+
+# Install nvm and Node.js
+ARG NODE_VERSION=23
+ENV NVM_DIR=/usr/local/nvm
+RUN mkdir -p $NVM_DIR \
+    && curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh -o /tmp/install_nvm.sh \
+    && bash /tmp/install_nvm.sh \
+    && . "$NVM_DIR/nvm.sh" \
+    && nvm install ${NODE_VERSION} \
+    && nvm alias default ${NODE_VERSION}
+# Source nvm in interactive shells
+RUN echo 'export NVM_DIR="/usr/local/nvm"' >> /etc/bash.bashrc \
+    && echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"' >> /etc/bash.bashrc
+
+# Make node, npm, and npx available system-wide for non-interactive shells
+RUN . "$NVM_DIR/nvm.sh" \
+    && nvm use default >/dev/null \
+    && NODE_BIN_DIR="$(dirname "$(nvm which current)")" \
+    && ln -sf "$NODE_BIN_DIR/node" /usr/local/bin/node \
+    && ln -sf "$NODE_BIN_DIR/npm" /usr/local/bin/npm \
+    && ln -sf "$NODE_BIN_DIR/npx" /usr/local/bin/npx
+
 
 RUN echo "Setting up LLVM version $LLVM_VERSION, be sure to run this script with sudo"
 

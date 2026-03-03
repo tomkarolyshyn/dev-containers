@@ -8,6 +8,7 @@ services:
       args:
         BASE_IMAGE: ubuntu:24.04
         LLVM_VERSION: ${LLVM_VERSION:-20}
+        NODE_VERSION: ${NODE_VERSION:-23}
     image: tomkarolyshyn/llvm-python:3.12-${LLVM_VERSION}
 
   rtl-sim:
@@ -73,7 +74,7 @@ services:
       - SSH_AUTH_SOCK=/ssh-agent
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix #x11
-      - $SSH_AUTH_SOCK:/ssh-agent
+      - ${SSH_AUTH_SOCK:-/dev/null}:/ssh-agent
     image: vitis:2025.2
     network_mode: host # Optional: Only for Linux
     stdin_open: true
