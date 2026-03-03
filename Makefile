@@ -91,7 +91,7 @@ llvm-cuda-run:
 
 llvm-cuda-test:
 	@echo "Testing CUDA 24 container with GPU access (requires GPU)..."
-	docker compose run --rm llvm-cuda-24 bash -c "nvidia-smi && clang --version && yosys --version && verilator --version  && node -v""
+	docker compose run --rm llvm-cuda-24 bash -c "nvidia-smi && clang --version && yosys --version && verilator --version  && node -v"
 
 ##########################
 # vitis
