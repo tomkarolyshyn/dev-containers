@@ -57,6 +57,8 @@ RUN . "$NVM_DIR/nvm.sh" \
     && ln -sf "$NODE_BIN_DIR/node" /usr/local/bin/node \
     && ln -sf "$NODE_BIN_DIR/npm" /usr/local/bin/npm \
     && ln -sf "$NODE_BIN_DIR/npx" /usr/local/bin/npx
+
+
 RUN echo "Setting up LLVM version $LLVM_VERSION, be sure to run this script with sudo"
 
 RUN wget -N --no-clobber=no https://apt.llvm.org/llvm.sh

@@ -77,7 +77,7 @@ llvm-verilator-run:
 	docker compose run --rm llvm-verilator
 
 llvm-verilator-test:
-	docker compose run --rm llvm-verilator bash -c "clang --version && verilator --version && opt --version"
+	docker compose run --rm llvm-verilator bash -c "clang --version && verilator --version && opt --version && node -v"
 
 ##########################
 # llvm-cuda
