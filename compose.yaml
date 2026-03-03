@@ -74,7 +74,7 @@ services:
       - SSH_AUTH_SOCK=/ssh-agent
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix #x11
-      - $SSH_AUTH_SOCK:/ssh-agent
+      - ${SSH_AUTH_SOCK:-/dev/null}:/ssh-agent
     image: vitis:2025.2
     network_mode: host # Optional: Only for Linux
     stdin_open: true
