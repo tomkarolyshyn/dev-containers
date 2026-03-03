@@ -38,7 +38,7 @@ llvm-python-run:
 	docker compose run --rm llvm-python
 
 llvm-python-test:
-	docker compose run --rm llvm-python bash -c "clang --version && opt --version"
+	docker compose run --rm llvm-python bash -c "clang --version && opt --version && node -v"
 
 ##########################
 # rtl-sim
@@ -91,7 +91,7 @@ llvm-cuda-run:
 
 llvm-cuda-test:
 	@echo "Testing CUDA 24 container with GPU access (requires GPU)..."
-	docker compose run --rm llvm-cuda-24 bash -c "nvidia-smi && clang --version && yosys --version && verilator --version"
+	docker compose run --rm llvm-cuda-24 bash -c "nvidia-smi && clang --version && yosys --version && verilator --version  && node -v""
 
 ##########################
 # vitis

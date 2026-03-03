@@ -8,6 +8,7 @@ services:
       args:
         BASE_IMAGE: ubuntu:24.04
         LLVM_VERSION: ${LLVM_VERSION:-20}
+        NODE_VERSION: ${NODE_VERSION:-23}
     image: tomkarolyshyn/llvm-python:3.12-${LLVM_VERSION}
 
   rtl-sim:
