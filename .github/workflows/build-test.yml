@@ -1,0 +1,119 @@
+name: Build and Test Images
+
+on:
+  workflow_call:
+    inputs:
+      push:
+        description: "Push images to DockerHub"
+        type: boolean
+        default: false
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: false
+      DOCKERHUB_TOKEN:
+        required: false
+
+env:
+  IMAGE_PREFIX: tomkarolyshyn
+
+jobs:
+  build-base:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - service: llvm-python
+            image: llvm-python
+            tag_expr: "3.12-${LLVM_VERSION}"
+            test_cmd: "clang --version && opt --version && node -v"
+          - service: rtl-sim
+            image: rtl-sim
+            tag_expr: "${VERILATOR_REV}"
+            test_cmd: "verilator --version"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Load .env
+        run: cat .env >> "$GITHUB_ENV"
+
+      - name: Log in to DockerHub
+        if: inputs.push
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image
+        run: docker compose build ${{ matrix.service }}
+
+      - name: Tag latest
+        if: inputs.push
+        run: |
+          VERSIONED_TAG="${{ matrix.tag_expr }}"
+          docker tag ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}:${VERSIONED_TAG} \
+                     ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}:latest
+
+      - name: Smoke test
+        run: |
+          VERSIONED_TAG="${{ matrix.tag_expr }}"
+          docker run --rm ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}:${VERSIONED_TAG} \
+            bash -c "${{ matrix.test_cmd }}"
+
+      - name: Push all tags
+        if: inputs.push
+        run: docker push --all-tags ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}
+
+  build-derived:
+    needs: build-base
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: llvm-verilator
+            image: llvm-verilator
+            tag_expr: "${LLVM_VERSION}-${VERILATOR_REV}"
+            test_cmd: "clang --version && verilator --version && opt --version"
+          - service: llvm-oss
+            image: llvm-oss
+            tag_expr: "${LLVM_VERSION}-${OSS_CAD_SUITE_VERSION}"
+            test_cmd: "clang --version && yosys --version && verilator --version && uv --version && opt --version"
+          - service: llvm-cuda-24
+            image: llvm-cuda
+            tag_expr: "cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}"
+            test_cmd: "clang --version && yosys --version && verilator --version && node -v"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Load .env
+        run: cat .env >> "$GITHUB_ENV"
+
+      - name: Log in to DockerHub
+        if: inputs.push
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image
+        run: docker compose build ${{ matrix.service }}
+
+      - name: Tag latest
+        if: inputs.push
+        run: |
+          VERSIONED_TAG="${{ matrix.tag_expr }}"
+          docker tag ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}:${VERSIONED_TAG} \
+                     ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}:latest
+
+      - name: Smoke test
+        run: |
+          VERSIONED_TAG="${{ matrix.tag_expr }}"
+          docker run --rm ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}:${VERSIONED_TAG} \
+            bash -c "${{ matrix.test_cmd }}"
+
+      - name: Push all tags
+        if: inputs.push
+        run: docker push --all-tags ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}
