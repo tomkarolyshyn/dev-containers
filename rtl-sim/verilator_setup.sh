@@ -33,7 +33,7 @@ git clone --branch "${VERILATOR_REV}" --depth 1 https://github.com/verilator/ver
 cd verilator
 autoconf
 ./configure
-make -j
+make -j2
 make install
 cd ..
 rm -r verilator
