@@ -13,10 +13,11 @@ on:
       DOCKERHUB_TOKEN:
         required: false
 
-
 jobs:
   build-base:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_PREFIX: tomkarolyshyn
     strategy:
       fail-fast: true
       matrix:
@@ -25,13 +26,9 @@ jobs:
             image: llvm-python
             tag_expr: "3.12-${LLVM_VERSION}"
             test_cmd: "clang --version && opt --version && node -v"
-          - service: rtl-sim
-            image: rtl-sim
-            tag_expr: "${VERILATOR_REV}"
-            test_cmd: "verilator --version"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Load .env
         run: cat .env >> "$GITHUB_ENV"
@@ -64,9 +61,10 @@ jobs:
         run: docker push --all-tags ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}
 
   build-derived:
-    if: inputs.push
     needs: build-base
     runs-on: ubuntu-latest
+    env:
+      IMAGE_PREFIX: tomkarolyshyn
     strategy:
       fail-fast: false
       matrix:
@@ -85,7 +83,7 @@ jobs:
             test_cmd: "clang --version && yosys --version && verilator --version && node -v"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Load .env
         run: cat .env >> "$GITHUB_ENV"
