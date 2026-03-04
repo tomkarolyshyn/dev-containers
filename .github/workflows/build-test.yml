@@ -13,8 +13,6 @@ on:
       DOCKERHUB_TOKEN:
         required: false
 
-env:
-  IMAGE_PREFIX: tomkarolyshyn
 
 jobs:
   build-base:
@@ -66,6 +64,7 @@ jobs:
         run: docker push --all-tags ${{ env.IMAGE_PREFIX }}/${{ matrix.image }}
 
   build-derived:
+    if: inputs.push
     needs: build-base
     runs-on: ubuntu-latest
     strategy:
