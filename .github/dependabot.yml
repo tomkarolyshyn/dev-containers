@@ -1,0 +1,39 @@
+version: 2
+updates:
+  # Docker base images in all Dockerfiles
+  - package-ecosystem: "docker"
+    directory: "/llvm-python"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/rtl-sim"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/oss"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/llvm-cuda"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "docker"
+    directory: "/vitis"
+    schedule:
+      interval: "weekly"
+
+  # Python dependencies in rtl-sim
+  - package-ecosystem: "pip"
+    directory: "/rtl-sim"
+    schedule:
+      interval: "weekly"
+
+  # GitHub Actions versions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
