@@ -82,6 +82,14 @@ jobs:
             tag_expr: "cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}"
             test_cmd: "clang --version && yosys --version && verilator --version && node -v"
     steps:
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/powershell
+          df -h
+
       - name: Checkout
         uses: actions/checkout@v6
 
