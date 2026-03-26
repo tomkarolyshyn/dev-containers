@@ -38,6 +38,9 @@ ENV PIP_NO_CACHE_DIR=1
 # install some python packages for use in sim
 RUN pip install --break-system-packages -r /tmp/requirements.txt
 
+ARG BUILD_DATE
+LABEL org.opencontainers.image.created=${BUILD_DATE}
+
 # Set up a working directory
 RUN mkdir -p /project
 WORKDIR /project

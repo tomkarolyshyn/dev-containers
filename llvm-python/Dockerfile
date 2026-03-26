@@ -88,9 +88,10 @@ ENV PIP_NO_CACHE_DIR=1
 RUN pip install --break-system-packages uv
 RUN pip install --break-system-packages pre-commit
 
+ARG BUILD_DATE
+LABEL org.opencontainers.image.created=${BUILD_DATE}
+
 WORKDIR /project
-# Necessary for a couple of old tests
-# cmd ["make" "examples"]
 
 
 ##############################

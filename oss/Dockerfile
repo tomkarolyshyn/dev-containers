@@ -53,5 +53,8 @@ RUN . "$NVM_DIR/nvm.sh" \
 RUN echo "Setting up LLVM version $LLVM_VERSION, be sure to run this script with sudo"
 
 
+ARG BUILD_DATE
+LABEL org.opencontainers.image.created=${BUILD_DATE}
+
 ENV PATH="/root/.local/bin:/opt/oss-cad-suite/bin:${PATH}"
 

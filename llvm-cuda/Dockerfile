@@ -56,6 +56,9 @@ RUN OSS_CAD_SUITE_DATE=$(echo ${OSS_CAD_SUITE_VERSION} | sed 's/^\([0-9]\{4\}\)\
     tar -xzf oss-cad-suite-linux-x64-${OSS_CAD_SUITE_VERSION}.tgz -C /opt && \
     rm oss-cad-suite-linux-x64-${OSS_CAD_SUITE_VERSION}.tgz
 
+ARG BUILD_DATE
+LABEL org.opencontainers.image.created=${BUILD_DATE}
+
 ENV PATH="/root/.local/bin:/opt/oss-cad-suite/bin:${PATH}"
 
 

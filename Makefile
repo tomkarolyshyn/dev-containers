@@ -2,6 +2,8 @@
 include .env
 export
 
+BUILD_DATE := $(shell date +%Y%m%d)
+
 .PHONY: help all push build-and-push \
  llvm-python llvm-python-run llvm-python-build llvm-python-test \
  rtl-sim rtl-sim-run rtl-sim-build rtl-sim-test \
@@ -32,6 +34,7 @@ help:
 ##########################
 llvm-python-build:
 	docker compose build llvm-python
+	docker tag tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION) tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION)-$(BUILD_DATE)
 	docker tag tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION) tomkarolyshyn/llvm-python:latest
 
 llvm-python-run:
@@ -45,6 +48,7 @@ llvm-python-test:
 ##########################
 rtl-sim-build:
 	docker compose build rtl-sim
+	docker tag tomkarolyshyn/rtl-sim:$(VERILATOR_REV) tomkarolyshyn/rtl-sim:$(VERILATOR_REV)-$(BUILD_DATE)
 	docker tag tomkarolyshyn/rtl-sim:$(VERILATOR_REV) tomkarolyshyn/rtl-sim:latest
 
 rtl-sim-run:
@@ -58,6 +62,7 @@ rtl-sim-test:
 ##########################
 llvm-oss-build:
 	docker compose build llvm-oss
+	docker tag tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION) tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION)-$(BUILD_DATE)
 	docker tag tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION) tomkarolyshyn/llvm-oss:latest
 
 llvm-oss-run:
@@ -71,6 +76,7 @@ llvm-oss-test:
 ##########################
 llvm-verilator-build:
 	docker compose build llvm-verilator
+	docker tag tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV) tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV)-$(BUILD_DATE)
 	docker tag tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV) tomkarolyshyn/llvm-verilator:latest
 
 llvm-verilator-run:
@@ -84,6 +90,7 @@ llvm-verilator-test:
 ##########################
 llvm-cuda-build:
 	docker compose build llvm-cuda-24
+	docker tag tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION} tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}-$(BUILD_DATE)
 	docker tag tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION} tomkarolyshyn/llvm-cuda:latest
 
 llvm-cuda-run:
@@ -112,12 +119,17 @@ vitis-test:
 all:
 	# Build all images, parallel builds through docker compose
 	docker compose build llvm-python rtl-sim llvm-verilator llvm-cuda-24 llvm-oss
-	# Tagging latest for all images, note that
+	# Tagging dated + latest for all images, note that
 	# this may be dangerous if builds fail.
+	docker tag tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION) tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION)-$(BUILD_DATE)
 	docker tag tomkarolyshyn/llvm-python:3.12-$(LLVM_VERSION) tomkarolyshyn/llvm-python:latest
+	docker tag tomkarolyshyn/rtl-sim:$(VERILATOR_REV) tomkarolyshyn/rtl-sim:$(VERILATOR_REV)-$(BUILD_DATE)
 	docker tag tomkarolyshyn/rtl-sim:$(VERILATOR_REV) tomkarolyshyn/rtl-sim:latest
+	docker tag tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV) tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV)-$(BUILD_DATE)
 	docker tag tomkarolyshyn/llvm-verilator:$(LLVM_VERSION)-$(VERILATOR_REV) tomkarolyshyn/llvm-verilator:latest
+	docker tag tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION} tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION}-$(BUILD_DATE)
 	docker tag tomkarolyshyn/llvm-cuda:cuda-${CUDA_VERSION}-llvm-${LLVM_VERSION} tomkarolyshyn/llvm-cuda:latest
+	docker tag tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION) tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION)-$(BUILD_DATE)
 	docker tag tomkarolyshyn/llvm-oss:$(LLVM_VERSION)-$(OSS_CAD_SUITE_VERSION) tomkarolyshyn/llvm-oss:latest
 
 ##########################
