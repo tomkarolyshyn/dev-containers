@@ -96,15 +96,18 @@ llvm-cuda-test:
 ##########################
 # vitis
 ##########################
+# Built rootful: rootless podman commits the ~60GB install layer extremely
+# slowly even with native overlay, due to user-namespace metadata overhead.
+# The image lives in /var/lib/containers/storage and is only visible to
+# `sudo podman`, never your rootless store. See README for details.
 vitis-build:
-	# remove --progress=plain to reduce output verbosity
-	podman compose build --progress=plain vitis
+	sudo podman compose build vitis
 
 vitis-run:
-	podman compose run --rm vitis
+	sudo podman compose run --rm vitis
 
 vitis-test:
-	podman compose run --rm vitis bash -c "source /tools/Xilinx/2025.2/Vitis/settings64.sh && vivado -version && vitis --version"
+	sudo podman compose run --rm vitis bash -c "source /tools/Xilinx/2025.2/Vitis/settings64.sh && vivado -version && vitis --version"
 
 ##########################
 # Build all

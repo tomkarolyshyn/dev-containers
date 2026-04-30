@@ -82,6 +82,19 @@ The vitis image is currently based of the base Ubuntu image, but certainly modif
     - ...wait
     - creates a 62GB docker image.
 
+### Why vitis builds rootful (sudo)
+
+The `vitis-build`, `vitis-run`, and `vitis-test` Make targets invoke `sudo podman` rather than rootless `podman`. This is intentional.
+
+The Vitis install produces a ~60GB image layer. Rootless podman — even on a kernel with native overlay support and `Native Overlay Diff: true` — commits a layer this large extremely slowly (hours), because user-namespace metadata bookkeeping dominates over actual I/O. After `xsetup` prints `Tool installation completed`, the build appears to hang while podman writes the layer. Rootful podman uses kernel overlay directly with no namespace remap and finishes the commit in minutes.
+
+Implications:
+
+- The vitis image lives in `/var/lib/containers/storage` (rootful store), not your rootless store at `~/.local/share/containers/storage`.
+- It will **not** appear in `podman images`. Use `sudo podman images` to see it.
+- All other images in this repo continue to build/run rootless as normal.
+- Vitis is never pushed to DockerHub anyway (size + license), so the rootful-only store is fine.
+
 <!-- ![Install screen shot](./vitis/install_screenshot.png) -->
 
 
