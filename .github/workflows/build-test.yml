@@ -28,7 +28,7 @@ jobs:
             test_cmd: "clang --version && opt --version && node -v"
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Load .env
         run: cat .env >> "$GITHUB_ENV"
@@ -91,7 +91,7 @@ jobs:
           df -h
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Load .env
         run: cat .env >> "$GITHUB_ENV"
