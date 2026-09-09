@@ -3,5 +3,5 @@ PyYAML
 pytest
 ruff
 mypy
-cocotb==1.9.2 # for cocotb 1.9.2
+cocotb==2.1.0 # for cocotb 1.9.2
 cocotbext-axi
